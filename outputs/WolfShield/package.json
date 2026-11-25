@@ -1,0 +1,26 @@
+{
+  "name": "wolfshield",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "GPL-3.0-only",
+  "description": "Local-first network and cosmetic filtering for WebExtensions",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "lists": "node scripts/fetch-lists.mjs",
+    "check": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "test:browser": "node tests/browser.mjs",
+    "package": "node scripts/package.mjs"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.0.287",
+    "esbuild": "0.25.12",
+    "playwright": "1.56.1",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "version": "1.0.0",
+  "rules": 14367,
+  "expected": 14367,
+  "consistent": true,
+  "scripts": [],
+  "feedback": true,
+  "report": {
+    "lists": {
+      "easylist": {
+        "parsed": 50216,
+        "compacted": 3865,
+        "selected": 3868,
+        "omitted": 0,
+        "rejected": 3823,
+        "duplicates": 1,
+        "cosmetic": 24197,
+        "hash": "f5cd9be52e26ec2c21ebbc20e71cc26832b4a556aed900918b7ff3c1f69efb17",
+        "updated": "2026-11-25T05:10:22.596Z",
+        "examples": [
+          "/earn.php?z=$popup,subdocument",
+          "&adb=y&adb=y^$popup",
+          "&cbiframe=$popup",
+          "&fp_sid=pop$popup,third-party",
+          "&popunder=$popup",
+          "&popundersPerIP=$popup",
+          "&sseq=*&dseq=$popup,third-party",
+          "&zoneid=*&ad_$popup"
+        ]
+      },
+      "easyprivacy": {
+        "parsed": 56745,
+        "compacted": 9362,
+        "selected": 9362,
+        "omitted": 0,
+        "rejected": 84,
+        "duplicates": 4,
+        "cosmetic": 2,
+        "hash": "db9afe93d9fda7f6c0e2164e0824b8d287ab41919bb2d3c30debd636a623122b",
+        "updated": "2026-11-25T05:10:23.089Z",
+        "examples": [
+          "$third-party,xmlhttprequest,domain=opensubtitles.org",
+          "||1.1.1.1/dns-query$xmlhttprequest,domain=allmodern.com|birchlane.com|catbirdnyc.com|gametime.co|jossandmain.com|ladym.com|libertylondon.com|mediamarkt.de|nobullproject.com|paynow.",
+          "/^https:\\/\\/cdn\\.jsdelivr\\.net\\/npm\\/[-a-z_]{4,22}@latest\\/dist\\/script\\.min\\.js$/$script,third-party",
+          "||0.0.0.0^$third-party,domain=~0.0.0.0|~127.0.0.1|~[::1]|~[::]|~local|~localhost",
+          "||[::]^$third-party,domain=~0.0.0.0|~127.0.0.1|~[::1]|~[::]|~local|~localhost",
+          "||d1z2jf7jlzjs58.cloudfront.net^$rewrite=abp-resource:blank-js,domain=voici.fr",
+          "/^https?:\\/\\/fdts\\.ebay-kleinanzeigen\\.de\\/[a-z0-9]{13,18}\\.js\\?/$script,domain=kleinanzeigen.de",
+          "/^https?:\\/\\/pov\\.spectrum\\.net\\/[a-zA-Z0-9]{14,}\\.js/$script,domain=spectrum.net"
+        ]
+      },
+      "spanish": {
+        "parsed": 618,
+        "compacted": 581,
+        "selected": 581,
+        "omitted": 0,
+        "rejected": 117,
+        "duplicates": 0,
+        "cosmetic": 1922,
+        "hash": "b7cdbf394b5fe11ddc05d251da8bc660437938145e2a0ddeee0d91611cca59e9",
+        "updated": "2026-11-25T05:10:23.201Z",
+        "examples": [
+          "&adbIsActive=$popup",
+          "/bjmp*.htm^$popup",
+          "/mavenjump.htm^$popup",
+          "||35.193.89.147^$popup,third-party",
+          "||3r1kwxcd.top^$popup,third-party",
+          "||acortar.net^$popup,third-party",
+          "||adfpoint.com^$popup,third-party",
+          "||admeridianads.com^$popup,third-party"
+        ]
+      },
+      "malware": {
+        "parsed": 134708,
+        "compacted": 270,
+        "selected": 540,
+        "omitted": 0,
+        "rejected": 0,
+        "duplicates": 0,
+        "cosmetic": 0,
+        "hash": "bc2f9e974e3a706cee0d418f5222c57cb6897e51bf3dda4ba52c6b6d43b2a8d1",
+        "updated": "2026-11-25T05:10:24.138Z",
+        "examples": []
+      }
+    },
+    "rejected": 4024,
+    "omitted": 0,
+    "custom": {
+      "network": 0,
+      "cosmetic": 0,
+      "rejected": 0,
+      "examples": []
+    },
+    "total": 14367,
+    "budget": 28000,
+    "privacyWarnings": [],
+    "applied": "2026-11-25T05:10:31.731Z"
+  }
+}

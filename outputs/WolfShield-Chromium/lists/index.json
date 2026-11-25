@@ -1,0 +1,34 @@
+{
+  "easylist": {
+    "name": "EasyList",
+    "url": "https://easylist.to/easylist/easylist.txt",
+    "license": "GPL-3.0-or-later",
+    "hash": "f5cd9be52e26ec2c21ebbc20e71cc26832b4a556aed900918b7ff3c1f69efb17",
+    "retrieved": "2026-11-25T04:51:47.457Z",
+    "bytes": 2066945
+  },
+  "easyprivacy": {
+    "name": "EasyPrivacy",
+    "url": "https://easylist.to/easylist/easyprivacy.txt",
+    "license": "GPL-3.0-or-later",
+    "hash": "db9afe93d9fda7f6c0e2164e0824b8d287ab41919bb2d3c30debd636a623122b",
+    "retrieved": "2026-11-25T04:51:47.864Z",
+    "bytes": 1522101
+  },
+  "spanish": {
+    "name": "EasyList Spanish",
+    "url": "https://easylist-downloads.adblockplus.org/easylistspanish.txt",
+    "license": "GPL-3.0-or-later",
+    "hash": "b7cdbf394b5fe11ddc05d251da8bc660437938145e2a0ddeee0d91611cca59e9",
+    "retrieved": "2026-11-25T04:51:48.075Z",
+    "bytes": 128859
+  },
+  "malware": {
+    "name": "HaGeZi Threat Intelligence Mini",
+    "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.mini.txt",
+    "license": "GPL-3.0-only",
+    "hash": "bc2f9e974e3a706cee0d418f5222c57cb6897e51bf3dda4ba52c6b6d43b2a8d1",
+    "retrieved": "2026-11-25T04:51:48.322Z",
+    "bytes": 2847411
+  }
+}

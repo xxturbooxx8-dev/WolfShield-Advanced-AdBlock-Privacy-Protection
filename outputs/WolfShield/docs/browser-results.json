@@ -1,0 +1,117 @@
+{
+  "results": [
+    {
+      "name": "Default lists install real DNR rules",
+      "status": "passed",
+      "ms": 1237
+    },
+    {
+      "name": "Default advertising and tracking domain rules match",
+      "status": "passed",
+      "ms": 4
+    },
+    {
+      "name": "Custom network filter blocks a real HTTP request",
+      "status": "passed",
+      "ms": 6853
+    },
+    {
+      "name": "Cosmetic filter hides existing and dynamically added ads, preserves content",
+      "status": "passed",
+      "ms": 21
+    },
+    {
+      "name": "Statistics come from observed request events",
+      "status": "passed",
+      "ms": 1517
+    },
+    {
+      "name": "Real advertising and tracker requests fail with ERR_BLOCKED_BY_CLIENT",
+      "status": "passed",
+      "ms": 4
+    },
+    {
+      "name": "Site pause allows the request and restores cosmetic content",
+      "status": "passed",
+      "ms": 6406
+    },
+    {
+      "name": "Main-world adapter runs before inline detection and preserves empty baits",
+      "status": "passed",
+      "ms": 5659
+    },
+    {
+      "name": "Local inert script replacement prevents original execution",
+      "status": "passed",
+      "ms": 5660
+    },
+    {
+      "name": "URL cleanup removes tracking parameters and preserves other data",
+      "status": "passed",
+      "ms": 14
+    },
+    {
+      "name": "Per-site cleanup overrides work for direct address-bar navigations",
+      "status": "passed",
+      "ms": 14940
+    },
+    {
+      "name": "Strict fingerprint controls deny canvas and offline audio readback",
+      "status": "passed",
+      "ms": 854
+    },
+    {
+      "name": "Disabling strict mode restores canvas after reload",
+      "status": "passed",
+      "ms": 878
+    },
+    {
+      "name": "Malicious-domain default navigation is matched without visiting it",
+      "status": "passed",
+      "ms": 11
+    },
+    {
+      "name": "Element picker saves a real domain-scoped filter",
+      "status": "passed",
+      "ms": 1089
+    },
+    {
+      "name": "Settings survive service-worker restart and browser relaunch",
+      "status": "passed",
+      "ms": 1911
+    },
+    {
+      "name": "Dashboard and popup render without application errors",
+      "status": "passed",
+      "ms": 2963
+    },
+    {
+      "name": "Content scripts cannot mutate privileged settings",
+      "status": "passed",
+      "ms": 10
+    },
+    {
+      "name": "Global privacy settings apply and release browser control",
+      "status": "passed",
+      "ms": 1882
+    },
+    {
+      "name": "Invalid import rejected and previous configuration preserved",
+      "status": "passed",
+      "ms": 9
+    },
+    {
+      "name": "HTTPS subscription refresh applies lists and daily alarm exists",
+      "status": "passed",
+      "ms": 6689
+    },
+    {
+      "name": "Statistics deletion clears persisted events",
+      "status": "passed",
+      "ms": 9
+    }
+  ],
+  "errors": [],
+  "browser": "141.0.7390.37",
+  "time": "2026-11-25T05:11:29.687Z"
+}

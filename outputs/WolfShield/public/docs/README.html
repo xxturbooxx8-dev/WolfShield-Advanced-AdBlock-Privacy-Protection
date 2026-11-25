@@ -1,0 +1,132 @@
+<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WolfShield · Documentación</title><link rel="stylesheet" href="../ui.css"><body><main style="max-width:960px;margin:auto;padding:32px"><h1>WolfShield · Documentación</h1><pre style="max-height:none;white-space:pre-wrap;font:15px/1.7 system-ui"># WolfShield
+
+Extensión real de bloqueo de solicitudes y filtrado cosmético. TypeScript, Manifest V3 y Declarative Net Request. Sin servidor propio, cuentas ni telemetría. **Versión 1.0.0; proyecto independiente, no afiliado a Brave, uBlock Origin ni a los mantenedores de las listas.**
+
+## Instalación rápida: Chrome, Brave y Edge
+
+1. Descomprime `WolfShield-Chromium.zip` en una carpeta permanente.
+2. Abre `chrome://extensions`, `brave://extensions` o `edge://extensions`.
+3. Activa **Modo de desarrollador**.
+4. Pulsa **Cargar descomprimida** y selecciona la carpeta que contiene `manifest.json`.
+5. Fija WolfShield en la barra. Abre una web normal y recárgala una vez.
+6. El engranaje abre el dashboard. Las listas iniciales ya están incluidas; no hace falta descargarlas para comenzar.
+
+También puedes cargar `dist/chromium` desde el proyecto fuente. No se ha instalado en tu perfil personal ni se ha publicado en ninguna tienda. Chromium mínimo declarado: 121. La validación ejecutada y sus versiones concretas están en `docs/INFORME.md`.
+
+## Firefox
+
+La adaptación está en `dist/firefox` / `WolfShield-Firefox.zip`. Utiliza background scripts de MV3 en lugar del service worker de Chromium. Firefox mínimo declarado: 140. Para carga temporal, abre `about:debugging#/runtime/this-firefox`, pulsa **Cargar complemento temporal** y selecciona `manifest.json`. Acepta los permisos de sitios necesarios en el administrador de complementos. La carga temporal termina al reiniciar Firefox; una instalación permanente requiere firma de Mozilla o una edición que permita complementos sin firma.
+
+**Esta adaptación no equivale a compatibilidad certificada:** consulta el informe de pruebas. Firefox no expone `contentSettings` como Chromium; los bloqueos de ventanas y notificaciones muestran la limitación correspondiente. El límite de reglas usa la capacidad reportada por el navegador, con un valor conservador de 5.000 cuando no se expone.
+
+## Qué hace
+
+- Bloqueo real de red mediante DNR, persistente entre sesiones. Incluye listas de anuncios, rastreadores y amenazas; scripts, imágenes/píxeles, XHR, medios y marcos. No necesita interceptar el contenido de las solicitudes.
+- Filtrado cosmético CSS con reglas globales y por dominio, excepciones y selector visual. CSS también afecta elementos creados después de cargar la página, sin recorridos periódicos del DOM.
+- Excepciones por sitio, tres perfiles y controles individuales. Cada dominio incluye subdominios; las entradas solapadas se rechazan para mantener consistencia entre CSS y red.
+- Limpieza de parámetros conocidos (`utm_*` enumerados en el código, `fbclid`, `gclid`, etc.) en navegaciones. Conserva otros parámetros. No inspecciona todos los cuerpos de solicitudes ni todos los enlaces.
+- HTTPS opcional por actualización de esquema; no realiza sondeos previos ni vuelve a HTTP si falla HTTPS.
+- Bloqueo opcional de scripts de terceros, ventanas emergentes y permisos de notificaciones. Las dos últimas funciones usan las preferencias del navegador.
+- WebRTC y cookies de terceros mediante las APIs de privacidad, con diagnóstico de conflictos. Son preferencias **globales e independientes del interruptor de protección web**. Desactivarlas libera el control de WolfShield, recuperando la configuración subyacente del navegador.
+- Adaptador anti-AdBlock local y voluntario para `canRunAds`, `blockAdBlock` y `fuckAdBlock`. Preserva señuelos vacíos conocidos al completar la carga del DOM, sin restaurar anuncios con contenido. Sustitución de scripts por `resources/noop.js` mediante filtros personalizados explícitos. No cambia autenticación, pagos ni controles de acceso.
+- Protección estricta experimental contra lecturas de Canvas, WebGL y audio offline, desactivada por defecto. Su alcance real se explica abajo.
+- Dashboard con listas, filtros, estadísticas opcionales, gráfico, registro reducido, sitios, temas, importación/exportación y diagnóstico.
+
+## Listas y actualizaciones
+
+Se incluyen instantáneas originales de EasyList, EasyPrivacy, EasyList Spanish y HaGeZi Threat Intelligence Mini. Se conservan los encabezados y licencias. El archivo `assets/lists/index.json` contiene procedencia, hora UTC de descarga, tamaño y SHA-256. Las fechas internas de las listas son las publicadas por sus autores.
+
+Peter Lowe, AdGuard Base y Fanboy’s Annoyances están en el catálogo y desactivadas inicialmente. Se descargan cuando se activan. No se redistribuye una copia de Peter Lowe; consulta sus condiciones vigentes en la URL de origen. Puedes añadir listas HTTPS, fijar un SHA-256 opcional y exportar/importar archivos TXT.
+
+La actualización automática ocurre aproximadamente cada 24 horas cuando el navegador está en ejecución. También hay actualización manual. Un fallo de red o integridad conserva la última copia válida. La caché usa IndexedDB; preferencias y estadísticas usan `storage.local`; contadores de pestaña usan `storage.session`.
+
+Los filtros se validan como datos, se deduplican y se compilan. Los dominios con condiciones idénticas se agrupan en bloques de hasta 500 por regla DNR. El plan reserva capacidad para reglas personalizadas y excepciones, conserva las reglas de permiso antes de recortar bloqueos y reparte el cupo restante entre las listas. **No se promete compatibilidad completa con ABP, uBO o AdGuard.** El dashboard muestra recuentos admitidos, omitidos por límite y rechazados; Diagnóstico incluye ejemplos. `docs/FILTROS.md` detalla la sintaxis.
+
+Un hash calculado localmente permite detectar cambios y verificar copias, pero no autentica al autor. Solo un **hash esperado obtenido de un canal de confianza** fija una versión concreta. HTTPS no sustituye a una firma del mantenedor. Fijar un hash impide actualizar a versiones nuevas hasta cambiarlo.
+
+## Datos y métricas
+
+No hay analytics, sincronización, cuentas, base de usuarios ni llamadas a un servidor WolfShield. Las únicas conexiones iniciadas por la extensión son las descargas de las listas activas. Cada proveedor recibe los datos normales de una conexión HTTPS, como la dirección IP. Puedes desactivar actualizaciones automáticas.
+
+Los contadores por pestaña cuentan eventos de bloqueo reales comunicados por DNR, no elementos CSS. El desglose depende del permiso de feedback y de la instalación descomprimida. Si el navegador no permite obtenerlo, se muestra **— / no disponible**. El contador nativo del icono puede incluir otras acciones DNR, como redirecciones; no se presenta como desglose de anuncios.
+
+Histórico y registro están apagados inicialmente. Si se activan: hasta 30 días UTC de totales; hasta 200 dominios de destino de rastreadores; hasta 200 eventos con hora, dominio de destino, categoría y tipo. No se guardan URLs completas, rutas, parámetros, contenido de páginas ni un historial de los sitios visitados. El top de dominios es el de **rastreadores bloqueados**, no el de páginas visitadas. La escritura se agrupa cada segundo: un cierre abrupto puede perder eventos recientes. Desactivar cada opción borra sus datos; el botón de borrado elimina todos los contadores.
+
+## Límites que debes conocer
+
+- Esto no reproduce el motor completo, años de reglas específicas ni cobertura de uBlock Origin o Brave. Es una implementación independiente auditable.
+- Una extensión no puede bloquear de forma universal anuncios de vídeo integrados con el contenido, publicidad del mismo origen ni publicidad insertada en el propio flujo multimedia. No se declara compatibilidad especial con YouTube.
+- El anti-AdBlock es opt-in y solo cubre patrones concretos. No garantiza invisibilidad. No se descargan ni evalúan scriptlets arbitrarios. No hay adaptadores de sitios comerciales sin pruebas controladas.
+- El fingerprinting estricto deniega lectura de Canvas y WebGL y renderizado de `OfflineAudioContext` en el marco principal. No altera audio en tiempo real. No cubre workers, todos los iframes, todas las APIs GPU ni otros rasgos de huella. Sus wrappers son detectables y pueden hacer reconocible el uso de la extensión: no se habilita por defecto, no se inventa ruido único ni se afirma anonimato. Puede romper exportación de imágenes, gráficos y aplicaciones de audio.
+- El filtrado CSS no atraviesa shadow roots cerrados, páginas internas del navegador ni páginas donde no se otorgó acceso. Se aplica al recibir configuración del background, de modo que puede existir un breve destello inicial. Límite por documento: 500 selectores genéricos y 2.000 totales, priorizando los específicos. Selectores CSS inválidos para el navegador se omiten.
+- Fanboy’s Annoyances debe estar activada junto con “Ocultar avisos de cookies”. Ocultar un aviso **no rechaza cookies ni constituye consentimiento**. La protección de cookies es una función separada.
+- Pausar un sitio retira CSS y permite la red. Los scripts ya inyectados se retiran únicamente al recargar. Si bloqueaste notificaciones o popups globalmente, esa preferencia continúa en los sitios pausados y se avisa en Diagnóstico. WebRTC/cookies globales también continúan hasta desactivarlas explícitamente.
+- Bloquear terceros o forzar HTTPS puede romper páginas. La limpieza de parámetros puede afectar enlaces firmados. Usa excepciones ante fallos.
+- No se bloquean todos los tipos de redirección intrusiva; se bloquean los destinos y scripts reconocidos, y los popups según la política del navegador. Un cambio de URL de primer nivel no se clasifica automáticamente como publicidad.
+- No hay verificación absoluta de cada dominio de amenazas: se usa la fuente mantenida por HaGeZi. Las listas pueden tener falsos positivos. El navegador conserva sus propias defensas.
+- Las reglas cosméticas específicas y los cambios de configuración no se sincronizan entre equipos.
+
+## Desarrollo reproducible
+
+Requisitos: Node.js 22.18+ y npm. El binario instalable ya está compilado y no necesita estas herramientas.
+
+```sh
+npm ci
+npm run check
+npm test
+npm run build
+npx playwright install chromium
+npm run test:browser
+```
+
+`npm run lists` descarga nuevas instantáneas y actualiza el índice de integridad. No es necesario para reconstruir la entrega; las instantáneas están incluidas. `npm run package` crea los ZIP con Python 3 disponible como `python` o con la ruta definida en `PYTHON`. Para regenerar iconos se necesita Pillow: `python scripts/icons.py`. Los SVG y PNG generados ya están incluidos.
+
+Los tests de navegador crean un perfil aislado en `../../work/browser-tests` respecto al proyecto; puedes definir `WOLFSHIELD_TEST_WORK`. No usan tu perfil personal ni visitan dominios maliciosos: esas coincidencias se verifican con `testMatchOutcome`.
+
+## Arquitectura
+
+```text
+src/
+  background.ts          Ciclo de vida MV3, mensajes validados y aplicación serializada
+  core/                   Tipos, preferencias y validación de importaciones
+  filtering/              Compilador ABP parcial, reglas DNR y selección CSS
+  lists/                  Descarga acotada, SHA-256 y caché IndexedDB
+  privacy/                Preferencias del navegador y adaptadores MAIN
+  scriptlets/             Compatibilidad local opt-in
+  statistics/             Contadores locales y retención temporal
+  content.ts              CSS y selector visual con Shadow DOM cerrado
+  ui/                     Popup, dashboard y utilidades DOM
+public/                   HTML, CSS, SVG, PNG y recurso de sustitución
+assets/lists/             Listas originales e índice de procedencia
+scripts/                  Compilación, listas, iconos y empaquetado
+tests/                    Pruebas unitarias e integración con Chromium
+dist/chromium/            Extensión instalable de desarrollo
+dist/firefox/             Adaptación independiente
+docs/                     Sintaxis, seguridad e informe de validación
+```
+
+Las mutaciones del motor se serializan. Se reemplazan las reglas dinámicas mediante una actualización atómica DNR. Si falla el registro de scripts se reinstalan las reglas y registros anteriores. Las escrituras de disco no son una transacción común entre IndexedDB, storage y las APIs del navegador; un corte durante una escritura puede requerir “Reaplicar configuración”. La versión de configuración es 1; se rechazan formatos desconocidos.
+
+## Permisos y seguridad
+
+`storage`: preferencias y estadísticas locales. `alarms`: actualizaciones periódicas. `scripting`: adaptadores locales tempranos. `activeTab`: acceso desde el popup a la pestaña actual. `declarativeNetRequest`: bloqueo. `declarativeNetRequestFeedback`: métricas y validación de la entrega descomprimida. `privacy`: WebRTC y cookies de terceros. `contentSettings`: popups/notificaciones en Chromium. Acceso HTTP/HTTPS: filtrado cosmético, redirecciones, scriptlets y descarga de suscripciones HTTPS proporcionadas por el usuario. No se solicitan `history`, `webRequest`, `cookies`, `downloads` ni `unlimitedStorage`.
+
+No hay `eval`, `new Function`, código ejecutable remoto ni handlers HTML inline. Las páginas de configuración solo cargan scripts locales con CSP. Los valores remotos se muestran como texto. Las mutaciones se autorizan por ID de extensión y URL exacta de popup/dashboard. Los content scripts solo pueden pedir configuración o guardar una selección iniciada por el usuario, con dominio, marco y ventana de tiempo verificados. El almacenamiento de preferencias se restringe a contextos de confianza en navegadores que lo permiten.
+
+Para publicar en una tienda se necesita otra fase de revisión, pruebas en las versiones objetivo, declaración de privacidad, firma y adaptación de métricas sin feedback de desarrollo. La clave pública en `assets/development-key.txt` estabiliza el ID de pruebas; no es una clave privada de firma.
+
+## Licencia y documentación de referencia
+
+Código original: GPL-3.0-only. Se adjunta el texto en `LICENSE` y `licenses/GPL-3.0.txt`. El logo oficial está adaptado del emblema aportado por el usuario y conserva sus derechos correspondientes; ver `docs/IDENTIDAD.md`. Las listas mantienen su propia autoría; ver `THIRD_PARTY_NOTICES.md`. Se distribuyen sus textos originales y el código que produce las reglas, no solo datos compilados.
+
+Se consultaron las referencias oficiales antes de implementar:
+
+- [Chrome: Declarative Net Request](https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest)
+- [Chrome: scripting](https://developer.chrome.com/docs/extensions/reference/api/scripting)
+- [Chrome: privacy](https://developer.chrome.com/docs/extensions/reference/api/privacy)
+- [Chrome: contentSettings](https://developer.chrome.com/docs/extensions/reference/api/contentSettings)
+- [MDN: background en WebExtensions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/background)
+- [MDN: RegisteredContentScript](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/scripting/RegisteredContentScript)
+
+**WolfShield — Browse freely. Stay protected.**
+</pre></main></body></html>

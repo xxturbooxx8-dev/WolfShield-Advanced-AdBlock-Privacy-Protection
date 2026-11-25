@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>WolfShield · Panel avanzado</title>
+    <link rel="stylesheet" href="ui.css" />
+  </head>
+  <body class="dashboard">
+    <aside>
+      <div class="brand">
+        <img src="icons/wolf.png" width="43" height="43" alt="" />
+        <div>
+          <h1>WolfShield</h1>
+          <p>CONTROL CENTER</p>
+        </div>
+      </div>
+      <nav aria-label="Secciones">
+        <button data-section="overview" class="selected">◈ Resumen</button
+        ><button data-section="filters">≡ Listas y filtros</button
+        ><button data-section="sites">◎ Sitios web</button
+        ><button data-section="privacy">◇ Privacidad</button
+        ><button data-section="appearance">◐ Preferencias</button
+        ><button data-section="diagnostics">⌘ Diagnóstico</button>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="dot"></span> Procesamiento local
+        <p>Sin cuentas. Sin telemetría.</p>
+        <small>WolfShield 1.0</small>
+      </div>
+    </aside>
+    <main>
+      <header class="dashboard-header">
+        <div>
+          <span class="eyebrow">TU NAVEGACIÓN, TUS REGLAS</span>
+          <h2 id="page-title">Resumen de protección</h2>
+        </div>
+        <span class="pill">LOCAL FIRST</span>
+      </header>
+      <div id="status" role="status" aria-live="polite"></div>
+      <section id="overview" class="page-section">
+        <div class="hero">
+          <div>
+            <span class="eyebrow">WOLFSHIELD ESTÁ CONTIGO</span>
+            <h3>Menos ruido.<br />Más privacidad.</h3>
+            <p>
+              Bloqueo de red y protección sin enviar<br />tu actividad a ningún
+              servidor.
+            </p>
+            <label class="checkline"
+              ><input type="checkbox" id="global-enabled" /> Activar protección
+              web</label
+            >
+          </div>
+          <img
+            src="icons/wolf.png"
+            alt="Logo oficial de WolfShield"
+            width="155"
+            height="155"
+          />
+        </div>
+        <div class="metrics three">
+          <article>
+            <span>Anuncios · últimos 30 días UTC</span
+            ><strong id="total-ads">—</strong>
+          </article>
+          <article>
+            <span>Rastreadores · últimos 30 días UTC</span
+            ><strong id="total-trackers">—</strong>
+          </article>
+          <article>
+            <span>Reglas de red instaladas</span
+            ><strong id="total-rules">—</strong>
+          </article>
+        </div>
+        <div class="grid-two">
+          <article class="card">
+            <div class="card-heading">
+              <h3>Actividad de protección</h3>
+              <span class="legend">● Anuncios <b>● Rastreadores</b></span>
+            </div>
+            <div id="chart" class="chart"></div>
+            <p id="stats-note" class="subtle"></p>
+          </article>
+          <article class="card">
+            <h3>Destinos de seguimiento bloqueados</h3>
+            <div id="top-domains"></div>
+            <p class="subtle">
+              Solo dominios de rastreadores; no se registra el historial de
+              páginas visitadas.
+            </p>
+          </article>
+        </div>
+        <article class="card">
+          <div class="card-heading">
+            <h3>Registro local de bloqueos</h3>
+            <button id="clear-stats" class="secondary">
+              Borrar estadísticas
+            </button>
+          </div>
+          <p class="subtle">
+            Opcional. Hasta 200 eventos, sin rutas ni parámetros de URL. Puede
+            perder eventos pendientes al cerrar abruptamente.
+          </p>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hora</th>
+                  <th>Destino</th>
+                  <th>Categoría</th>
+                  <th>Tipo</th>
+                </tr>
+              </thead>
+              <tbody id="request-log"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+      <section id="filters" class="page-section" hidden>
+        <article class="card">
+          <div class="card-heading">
+            <div>
+              <h3>Listas de filtrado</h3>
+              <p class="subtle">
+                Fuentes externas solo para descargar filtros. Nunca se ejecuta
+                código remoto.
+              </p>
+            </div>
+            <button id="update-lists">Actualizar activas</button>
+          </div>
+          <label class="checkline"
+            ><input id="auto-update" type="checkbox" /> Actualizar cada 24
+            horas</label
+          >
+          <div id="list-manager"></div>
+          <p class="subtle">
+            Las listas grandes pueden quedar parcialmente aplicadas por los
+            límites de DNR. Consulta reglas omitidas y sintaxis rechazada en
+            Diagnóstico.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Añadir lista HTTPS</h3>
+          <form id="add-list" class="form-grid">
+            <label
+              >Nombre<input
+                id="list-name"
+                required
+                maxlength="100"
+                placeholder="Mi lista" /></label
+            ><label
+              >URL<input
+                id="list-url"
+                type="url"
+                required
+                placeholder="https://…" /></label
+            ><label
+              >Categoría<select id="list-category">
+                <option value="ads">Anuncios</option>
+                <option value="trackers">Rastreadores</option>
+                <option value="malware">Dominios maliciosos</option>
+                <option value="annoyances">Avisos de cookies</option>
+                <option value="custom">Personalizada</option>
+              </select></label
+            ><label
+              >SHA-256 esperado (opcional)<input
+                id="list-hash"
+                pattern="[a-fA-F0-9]{64}"
+                placeholder="Fijar una versión exacta" /></label
+            ><button>Añadir y descargar</button>
+          </form>
+        </article>
+        <article class="card">
+          <h3>Filtros personalizados</h3>
+          <p class="subtle">
+            Una regla por línea. Ejemplos: ||ads.example^ · @@||cdn.example^ ·
+            example.com##.banner<br />Recurso local:
+            ||example.com/ad.js$script,redirect=noop.js,domain=example.com
+          </p>
+          <textarea
+            id="custom-filters"
+            spellcheck="false"
+            rows="12"
+            aria-label="Editor de filtros personalizados"
+          ></textarea>
+          <div class="toolbar">
+            <button id="save-filters">Guardar filtros</button
+            ><button id="export-filters" class="secondary">Exportar TXT</button
+            ><label class="file-button"
+              >Importar TXT<input
+                id="import-filters"
+                type="file"
+                accept=".txt,text/plain"
+                hidden
+            /></label>
+          </div>
+          <p class="subtle">
+            Importar reemplaza el contenido del editor; Guardar lo aplica. Las
+            reglas no compatibles se rechazan y se muestran en Diagnóstico.
+          </p>
+        </article>
+      </section>
+      <section id="sites" class="page-section" hidden>
+        <article class="card">
+          <h3>Excepciones y permisos por dominio</h3>
+          <p class="subtle">
+            Cada entrada incluye sus subdominios. Usa dominios sin solapamiento.
+            Pausar permite las solicitudes y retira el filtrado cosmético;
+            recarga para retirar los adaptadores de scripts. Las preferencias
+            globales de WebRTC y cookies del navegador se gestionan en
+            Privacidad.
+          </p>
+          <form id="add-site" class="toolbar">
+            <input
+              id="site-domain"
+              placeholder="ejemplo.com"
+              required
+              aria-label="Dominio"
+            /><select id="site-mode">
+              <option value="paused">Pausar protección</option>
+              <option value="standard">Estándar</option>
+              <option value="aggressive">Agresivo</option></select
+            ><button>Añadir sitio</button>
+          </form>
+          <div id="site-manager"></div>
+        </article>
+      </section>
+      <section id="privacy" class="page-section" hidden>
+        <article class="card">
+          <h3>Protecciones predeterminadas</h3>
+          <p class="subtle">
+            Los ajustes por sitio tienen prioridad. HTTPS es una actualización
+            forzada: no se reintenta HTTP si el servidor falla. La limpieza de
+            URLs puede afectar enlaces firmados.
+          </p>
+          <div id="privacy-features" class="features"></div>
+        </article>
+        <article class="card">
+          <h3>Preferencias globales del navegador</h3>
+          <p class="subtle">
+            Se aplican también a sitios pausados. Al desactivarlas WolfShield
+            libera su control y recupera la preferencia previa del navegador.
+            Otras extensiones o políticas pueden impedir el cambio.
+          </p>
+          <label class="checkline"
+            ><input id="webrtc" type="checkbox" /> Limitar WebRTC: desactivar
+            UDP sin proxy (puede afectar llamadas)</label
+          ><label class="checkline"
+            ><input id="third-party-cookies" type="checkbox" /> Bloquear cookies
+            de terceros mediante la API del navegador</label
+          >
+          <div id="privacy-warnings" class="notice"></div>
+        </article>
+        <article class="card">
+          <h3>Estadísticas opcionales</h3>
+          <label class="checkline"
+            ><input id="statistics" type="checkbox" /> Guardar totales diarios y
+            destinos de rastreo durante 30 días</label
+          ><label class="checkline"
+            ><input id="request-log-toggle" type="checkbox" /> Guardar los
+            últimos 200 bloqueos locales</label
+          >
+          <p class="subtle">
+            Desactivar cada opción elimina sus datos. Los contadores de pestaña
+            son temporales. Las métricas detalladas requieren una instalación
+            descomprimida con feedback DNR.
+          </p>
+        </article>
+      </section>
+      <section id="appearance" class="page-section" hidden>
+        <article class="card">
+          <h3>Apariencia</h3>
+          <label
+            >Tema<select id="theme">
+              <option value="dark">Oscuro</option>
+              <option value="light">Claro</option>
+              <option value="auto">Automático</option>
+            </select></label
+          >
+        </article>
+        <article class="card">
+          <h3>Copia de configuración</h3>
+          <p class="subtle">
+            Incluye preferencias, listas, sitios y filtros personalizados. No
+            incluye estadísticas ni caché de listas. Importar reemplaza tu
+            configuración actual.
+          </p>
+          <div class="toolbar">
+            <button id="export-settings">Exportar JSON</button
+            ><label class="file-button"
+              >Importar y aplicar JSON<input
+                id="import-settings"
+                type="file"
+                accept="application/json,.json"
+                hidden
+            /></label>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Privacidad y código abierto</h3>
+          <p>
+            Sin telemetría, cuentas ni publicidad propia. Los filtros se
+            procesan localmente. Las actualizaciones contactan los servidores de
+            las listas activas; puedes desactivarlas.
+          </p>
+          <p>
+            WolfShield no garantiza invisibilidad, no sortea muros de pago ni
+            controles de acceso, y no reemplaza las protecciones del navegador.
+          </p>
+          <a href="docs/README.html" target="_blank" rel="noreferrer"
+            >Instalación, licencias y limitaciones ↗</a
+          >
+        </article>
+      </section>
+      <section id="diagnostics" class="page-section" hidden>
+        <article class="card">
+          <h3>Estado del motor</h3>
+          <div class="toolbar">
+            <button id="diagnose">Ejecutar diagnóstico</button
+            ><button id="repair" class="secondary">
+              Reaplicar configuración
+            </button>
+          </div>
+          <pre id="diagnostic-output">
+Ejecuta el diagnóstico para comprobar las reglas instaladas, adaptadores y límites.</pre
+          >
+        </article>
+        <article class="card">
+          <h3>Si una página deja de funcionar</h3>
+          <ol>
+            <li>Pausa WolfShield para ese dominio y recarga.</li>
+            <li>
+              Desactiva scripts de terceros, fingerprinting estricto y
+              compatibilidad anti-AdBlock.
+            </li>
+            <li>
+              Revisa los filtros personalizados y la lista de avisos de cookies.
+            </li>
+            <li>
+              Comprueba conflictos con otros bloqueadores en un perfil separado.
+            </li>
+          </ol>
+          <p class="subtle">
+            Filtrado parcial ABP. No se admiten selectores procedurales
+            uBO/AdGuard, expresiones regulares de filtros ni scriptlets
+            descargados. Los anuncios de vídeo integrados en el mismo flujo
+            pueden no bloquearse.
+          </p>
+        </article>
+      </section>
+    </main>
+    <script type="module" src="dashboard.js"></script>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+{
+  "manifest_version": 3,
+  "name": "WolfShield",
+  "version": "1.0.0",
+  "description": "Bloqueo local de anuncios, rastreadores y dominios maliciosos, con control por sitio.",
+  "permissions": [
+    "storage",
+    "alarms",
+    "scripting",
+    "activeTab",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "privacy",
+    "contentSettings"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "WolfShield",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "options_ui": {
+    "page": "dashboard.html",
+    "open_in_tab": true
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "resources/noop.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none';"
+  },
+  "minimum_chrome_version": "121",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2yafIHzY/Zr3t7M5jeNbHqgUWxAmaxBQXlHdNOWIrmo8zAJrARbKif+wXLsuTTZUgD3nW7apc1CT57DBsae2Pe8Mv74VBKvwxjLjb3Bu3ekt+mn2WnQklL/fiudKP3W9oZ/X5l0E9fpYXW0N7pXZCX1sx2Kk0AfChECJAx3RpwQsqJUOCVCmlyFKZBUko/bBGxVLNh5q1Aje/CAg/gNgxOh8uFy7WlqpZfYYSCEntojNM0m9gcoTmVu8rUv8Kx8nKvFdPRmyJ+6uzZDAd+fYUM7HRHTnqSBNVKSsQfRA0USOrWMHqRx/x8ZUr37KX/DfIpPvwa+y8s0/wR4AxWahJQIDAQAB"
+}
